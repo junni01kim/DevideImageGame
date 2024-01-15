@@ -34,6 +34,15 @@ public class GamePanel extends JPanel{
 			add(devideGamePanel[i]);
 		}
 		
+		for(int i=0;i<9;i++) {
+			int rand1 = (int)(Math.random()*9);
+			int rand2 = (int)(Math.random()*9);
+				
+			int tempIndex = devideGamePanel[rand1].getMyImageIndex();
+			devideGamePanel[rand1].setMyImageIndex(devideGamePanel[rand2].getMyImageIndex());
+			devideGamePanel[rand2].setMyImageIndex(tempIndex);
+		}
+		
 		addMouseListener(new ChangeDevideGamePanel());
 	}
 	
@@ -56,9 +65,9 @@ public class GamePanel extends JPanel{
 			int startIndex = (int) ((int)(startPoint.getY()/300)*3+(int)(startPoint.getX()/300));
 			int endIndex = (int) ((int)(endPoint.getY()/300)*3+(int)(endPoint.getX()/300));
 			
-			int tempIndex = devideGamePanel[startIndex].getIndex();
-			devideGamePanel[startIndex].setIndex(devideGamePanel[endIndex].getIndex());
-			devideGamePanel[endIndex].setIndex(tempIndex);
+			int tempIndex = devideGamePanel[startIndex].getMyImageIndex();
+			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());
+			devideGamePanel[endIndex].setMyImageIndex(tempIndex);
 			
 			gamePanel.repaint();
 			

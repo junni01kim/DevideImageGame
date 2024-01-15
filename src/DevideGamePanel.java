@@ -22,7 +22,7 @@ public class DevideGamePanel extends JPanel{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(images[index], 0, 0, this.getWidth(), this.getHeight(), this);
+		g.drawImage(images[myImageIndex], 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 	
 	DevideGamePanel(int index, BufferedImage[] images) {

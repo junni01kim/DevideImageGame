@@ -11,16 +11,14 @@ public class ScorePanel extends JPanel{
 	public void reprintPerfectionLabel() {
 		int count = 0;
 		for(int i=0; i<gameFrame.getGamePanel().getDevideGamePanel().length; i++) {
-			if(i == gameFrame.getGamePanel().getDevideGamePanel()[i].getIndex()) {
-				System.out.print(gameFrame.getGamePanel().getDevideGamePanel()[i].getIndex()+" ");
+			if(gameFrame.getGamePanel().getDevideGamePanel()[i].getMyImageIndex() == gameFrame.getGamePanel().getDevideGamePanel()[i].getIndex()) {
 				count++;
 			}
 		}
-		System.out.println("count:"+count);
-		perfectionLabel.setText(String.valueOf((int)((double)(count)/gameFrame.getGamePanel().getDevideGamePanel().length*100)));
+		perfectionLabel.setText("진행도:  "+String.valueOf((int)((double)(count)/gameFrame.getGamePanel().getDevideGamePanel().length*100)));
 	}
 	
-	private JLabel perfectionLabel = new JLabel("");
+	private JLabel perfectionLabel = new JLabel("진행도: ");
 	
 	ScorePanel(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
