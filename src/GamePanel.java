@@ -22,20 +22,20 @@ public class GamePanel extends JPanel{
 	private CropImage cropImage;
 	// 미리 선언하여 너비 높이 후 설정에서 오류가 날 수 있다.
 	private DevideGamePanel devideGamePanel[] = new DevideGamePanel[CropImage.cols*CropImage.rows];
-	private GridLayout gridLayout = new GridLayout(CropImage.rows,CropImage.rows,1,1);
+	private GridLayout gridLayout = null;
 	
 	public DevideGamePanel [] getDevideGamePanel() {return devideGamePanel;}
 	
 	GamePanel(GameFrame gameFrame, CropImage cropImage) {
-		this.cropImage = cropImage;
 		this.gameFrame = gameFrame;
+		this.cropImage = cropImage;
 		
 		gamePanel.setSize(900,900);
-		gamePanel.setLocation(30,(getHeight()-900)/CropImage.rows);
+		gamePanel.setLocation(30,gameFrame.getScorePanel().getY());
 		setBackground(Color.DARK_GRAY);
 		
 		// 원하는 규격
-		setLayout(gridLayout);
+		setLayout(null);
 		
 		for(int i=0;i<devideGamePanel.length;i++) {
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
@@ -50,6 +50,7 @@ public class GamePanel extends JPanel{
 			devideGamePanel[rand1].setMyImageIndex(devideGamePanel[rand2].getMyImageIndex());
 			devideGamePanel[rand2].setMyImageIndex(tempIndex);
 		}
+		repaint();
 		
 		addMouseListener(new ChangeDevideGamePanel());
 	}

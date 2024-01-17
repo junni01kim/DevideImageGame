@@ -8,11 +8,13 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class GetWidthHeightDialog extends JDialog{
+	private CropImage cropImage = null; 
 	private JTextField widthTextField = null;
 	private JTextField heightTextField = null;
 	private JButton setOptionButton = null;
 	
-	public GetWidthHeightDialog() {
+	public GetWidthHeightDialog(CropImage cropImage) {
+		this.cropImage = cropImage;
 		setTitle("행열 지정하기");
 		setSize(250,150);
 		setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
@@ -35,6 +37,7 @@ public class GetWidthHeightDialog extends JDialog{
 	private class setOptionButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			CropImage.setOption(Integer.parseInt(widthTextField.getText().trim()), Integer.parseInt(heightTextField.getText().trim()));
+			cropImage.toggleRepaintFlag();
 			setVisible(false);
 		}	
 	}

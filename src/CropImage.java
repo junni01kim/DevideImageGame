@@ -3,14 +3,16 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CropImage {
-		public static int cols;
-		public static int rows;
+		// 3x3은 기본 규격
+		public static int cols = 3;
+		public static int rows = 3;
 		public static int cropWidth;
 		public static int cropHeight;
 		
@@ -20,6 +22,11 @@ public class CropImage {
 		private GetWidthHeightDialog getWidthHeightDialog = null;
 		private BufferedImage crop[] = null;
 		
+		private String imageLink = "DevideImageGame.png";
+		private BufferedImage image = null;
+		
+		private boolean repaintFlag = false;
+		
 		public BufferedImage[] getCrop() {return crop;}
 		
 		public static void setOption(int row, int col) {
@@ -27,25 +34,90 @@ public class CropImage {
 			cols = col;
 		}
 		
+		public void toggleRepaintFlag() {
+			if(repaintFlag == true)
+				repaintFlag = false;
+			else
+				repaintFlag = true;
+		}
+		
+		public void onNotify() {
+			notify();
+		}
+		
+		synchronized private void checkWait() {
+			if(repaintFlag == true) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			else
+				notify();
+		}
+		
+		public void getNewGrid() {
+			getWidthHeightDialog = new GetWidthHeightDialog(this);
+			repaintFlag = true;
+			while(true) {
+				checkWait();
+				if(repaintFlag==false)
+					break;
+			}
+			
+			cropWidth = (int)(image.getWidth()/cols);
+			cropHeight = (int)(image.getHeight()/rows);
+			for(int i=0;i<crop.length;i++) {
+				crop[i] = image.getSubimage((i%cols)*cropWidth,(i/cols)*cropHeight, cropWidth, cropHeight);
+			}
+			
+			gameFrame.remove(gamePanel);
+			gameFrame.repaint();
+			gamePanel = new GamePanel(gameFrame, this);
+			gameFrame.add(gamePanel);
+			gameFrame.setGamePanel(gamePanel);
+			gameFrame.revalidate();
+			gameFrame.repaint();
+		}
+		
+		public void getNewImage() {
+			fileChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpeg", "JPG", "JPEG", "png", "PNG"));
+			fileChooser.setMultiSelectionEnabled(false);
+			
+			fileChooser.showOpenDialog(new JDialog());
+			if(fileChooser.getSelectedFile() == null) {
+				JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+			
+			String imageLink = fileChooser.getSelectedFile().toString();
+			try {
+				image = ImageIO.read(new File(imageLink));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			cropWidth = (int)(image.getWidth()/cols);
+			cropHeight = (int)(image.getHeight()/rows);
+			for(int i=0;i<crop.length;i++) {
+				crop[i] = image.getSubimage((i%cols)*cropWidth,(i/cols)*cropHeight, cropWidth, cropHeight);
+			}
+			
+			gameFrame.remove(gamePanel);
+			gameFrame.repaint();
+			gamePanel = new GamePanel(gameFrame, this);
+			gameFrame.add(gamePanel);
+			gameFrame.setGamePanel(gamePanel);
+			gameFrame.repaint();
+		}
+		
 		CropImage(GameFrame gameFrame) {
 			try {
 				this.gameFrame = gameFrame;
-				fileChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpeg", "JPG", "JPEG", "png", "PNG"));
-				fileChooser.setMultiSelectionEnabled(false);
 				
-				fileChooser.showOpenDialog(new JDialog());
-				if(fileChooser.getSelectedFile() == null) {
-					JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
-					System.exit(0);
-				}
-				String imageLink = fileChooser.getSelectedFile().toString();
-				BufferedImage image = ImageIO.read(new File(imageLink));
-				
-				getWidthHeightDialog = new GetWidthHeightDialog(); 
-				while(getWidthHeightDialog.isVisible()) {
-					
-					System.out.println(imageLink);
-				}
+				image = ImageIO.read(new File(imageLink));
 				
 				crop = new BufferedImage[cols*rows];
 				cropWidth = (int)(image.getWidth()/cols);
@@ -53,7 +125,6 @@ public class CropImage {
 				
 				for(int i=0;i<crop.length;i++) {
 					crop[i] = image.getSubimage((i%cols)*cropWidth,(i/cols)*cropHeight, cropWidth, cropHeight);
-					System.out.println(crop[i]);
 				}
 				
 				gamePanel = new GamePanel(gameFrame, this);

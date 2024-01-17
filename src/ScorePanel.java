@@ -22,7 +22,7 @@ public class ScorePanel extends JPanel{
 	
 	ScorePanel(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
-		setBackground(Color.DARK_GRAY);
+		setBackground(Color.GRAY);
 		
 		perfectionLabel.setForeground(Color.WHITE);
 		add(perfectionLabel);
