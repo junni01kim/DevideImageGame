@@ -11,32 +11,41 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GamePanel extends JPanel{
 	private GamePanel gamePanel = this;
 	private GameFrame gameFrame;
 	private CropImage cropImage;
-	private DevideGamePanel devideGamePanel[] = new DevideGamePanel[9];
-	private GridLayout gridLayout = new GridLayout(3,3,5,5);
+	// 미리 선언하여 너비 높이 후 설정에서 오류가 날 수 있다.
+	private DevideGamePanel devideGamePanel[] = null;
+	private GridLayout gridLayout = null;
 	
 	public DevideGamePanel [] getDevideGamePanel() {return devideGamePanel;}
 	
-	GamePanel(GameFrame gameFrame) {
-		cropImage = new CropImage();
+	GamePanel(GameFrame gameFrame, CropImage cropImage) {
 		this.gameFrame = gameFrame;
+		this.cropImage = cropImage;
+		setSize(900,900);
+		setLocation(30,(getHeight()-900)/CropImage.heightLength);
 		setBackground(Color.DARK_GRAY);
-		// 원하는 규격
+		// 원하는 규격		
 		setLayout(gridLayout);
 		
-		for(int i=0;i<9;i++) {
+		devideGamePanel = new DevideGamePanel[CropImage.widthLength*CropImage.heightLength];
+		gridLayout = new GridLayout(CropImage.heightLength,CropImage.widthLength);
+		
+		for(int i=0;i<devideGamePanel.length;i++) {
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
 			add(devideGamePanel[i]);
 		}
 		
-		for(int i=0;i<9;i++) {
-			int rand1 = (int)(Math.random()*9);
-			int rand2 = (int)(Math.random()*9);
+		for(int i=0;i<devideGamePanel.length;i++) {
+			int rand1 = (int)(Math.random()*devideGamePanel.length);
+			int rand2 = (int)(Math.random()*devideGamePanel.length);
 				
 			int tempIndex = devideGamePanel[rand1].getMyImageIndex();
 			devideGamePanel[rand1].setMyImageIndex(devideGamePanel[rand2].getMyImageIndex());
@@ -62,8 +71,8 @@ public class GamePanel extends JPanel{
 			endPoint.setLocation(e.getPoint());
 			
 			// 시작점과 끝 포인트의 마우스가 어느 컴포넌트 (배열 인덱스를 가르키는지 알게하는 함수)
-			int startIndex = (int) ((int)(startPoint.getY()/300)*3+(int)(startPoint.getX()/300));
-			int endIndex = (int) ((int)(endPoint.getY()/300)*3+(int)(endPoint.getX()/300));
+			int startIndex = (int) ((int)(startPoint.getY()/(gamePanel.getHeight()/CropImage.heightLength))*CropImage.widthLength+(int)(startPoint.getX()/(gamePanel.getHeight()/CropImage.widthLength)));
+			int endIndex = (int) ((int)(endPoint.getY()/(gamePanel.getHeight()/CropImage.heightLength))*CropImage.widthLength+(int)(endPoint.getX()/(gamePanel.getHeight()/CropImage.widthLength)));
 			
 			int tempIndex = devideGamePanel[startIndex].getMyImageIndex();
 			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());
@@ -72,24 +81,6 @@ public class GamePanel extends JPanel{
 			gamePanel.repaint();
 			
 			gameFrame.getScorePanel().reprintPerfectionLabel();
-		}
-	}
-	
-	class CropImage {
-		private BufferedImage crop[] = new BufferedImage[9];
-		
-		public BufferedImage[] getCrop() {return crop;}
-		
-		CropImage() {
-			try {
-				BufferedImage image = ImageIO.read(new File("DevideImageGame.png"));
-				for(int i=0;i<crop.length;i++) {
-					crop[i] = image.getSubimage((i%3)*300,(i/3)*300, 300, 300);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 }

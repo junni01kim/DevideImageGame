@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class DevideGamePanel extends JPanel{
-	private Image images[] = new Image[9];
+	private Image images[] = new Image[CropImage.widthLength*CropImage.heightLength];
 	private int index;
 	private int myImageIndex;
 	
@@ -29,7 +29,7 @@ public class DevideGamePanel extends JPanel{
 		this.images = images;
 		this.index = index;
 		myImageIndex = index;
-		setSize(300,300);
+		setSize(CropImage.cropWidth, CropImage.cropHeight);
 		setVisible(true);
 	}
 }
