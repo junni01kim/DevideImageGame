@@ -18,12 +18,12 @@ public class GetWidthHeightDialog extends JDialog{
 		setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
 		
 		add(new JLabel("     행 수      "));
-		heightTextField = new JTextField(13);
-		add(heightTextField);
-		
-		add(new JLabel("     열 수      "));
 		widthTextField = new JTextField(13);
 		add(widthTextField);
+		
+		add(new JLabel("     열 수      "));
+		heightTextField = new JTextField(13);
+		add(heightTextField);
 		
 		JButton setUpButton = new JButton("Set Option");
 		setUpButton.addActionListener(new setOptionButtonActionListener());
@@ -34,7 +34,7 @@ public class GetWidthHeightDialog extends JDialog{
 	
 	private class setOptionButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			CropImage.setOption(Integer.parseInt(heightTextField.getText().trim()),Integer.parseInt(widthTextField.getText().trim()));
+			CropImage.setOption(Integer.parseInt(widthTextField.getText().trim()), Integer.parseInt(heightTextField.getText().trim()));
 			setVisible(false);
 		}	
 	}

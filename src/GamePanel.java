@@ -21,15 +21,19 @@ public class GamePanel extends JPanel{
 	private GameFrame gameFrame;
 	private CropImage cropImage;
 	// 미리 선언하여 너비 높이 후 설정에서 오류가 날 수 있다.
-	private DevideGamePanel devideGamePanel[] = new DevideGamePanel[CropImage.widthLength*CropImage.heightLength];
-	private GridLayout gridLayout = new GridLayout(CropImage.heightLength,CropImage.heightLength);
+	private DevideGamePanel devideGamePanel[] = new DevideGamePanel[CropImage.cols*CropImage.rows];
+	private GridLayout gridLayout = new GridLayout(CropImage.rows,CropImage.rows,1,1);
 	
 	public DevideGamePanel [] getDevideGamePanel() {return devideGamePanel;}
 	
-	GamePanel(GameFrame gameFrame) {
-		cropImage = new CropImage();
+	GamePanel(GameFrame gameFrame, CropImage cropImage) {
+		this.cropImage = cropImage;
 		this.gameFrame = gameFrame;
+		
+		gamePanel.setSize(900,900);
+		gamePanel.setLocation(30,(getHeight()-900)/CropImage.rows);
 		setBackground(Color.DARK_GRAY);
+		
 		// 원하는 규격
 		setLayout(gridLayout);
 		
@@ -66,8 +70,8 @@ public class GamePanel extends JPanel{
 			endPoint.setLocation(e.getPoint());
 			
 			// 시작점과 끝 포인트의 마우스가 어느 컴포넌트 (배열 인덱스를 가르키는지 알게하는 함수)
-			int startIndex = (int) ((int)(startPoint.getY()/(gamePanel.getHeight()/CropImage.heightLength))*CropImage.widthLength+(int)(startPoint.getX()/(gamePanel.getHeight()/CropImage.widthLength)));
-			int endIndex = (int) ((int)(endPoint.getY()/(gamePanel.getHeight()/CropImage.heightLength))*CropImage.widthLength+(int)(endPoint.getX()/(gamePanel.getHeight()/CropImage.widthLength)));
+			int startIndex = (int) ((int)(startPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(startPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
+			int endIndex = (int) ((int)(endPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(endPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
 			
 			int tempIndex = devideGamePanel[startIndex].getMyImageIndex();
 			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());

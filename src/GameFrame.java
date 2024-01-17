@@ -3,8 +3,11 @@ import java.awt.Color;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame{
+	private CropImage cropImage = null;
 	private GamePanel gamePanel = null;
 	private ScorePanel scorePanel = null;
+	
+	public void setGamePanel(GamePanel gamePanel) {this.gamePanel = gamePanel;}
 	
 	public GamePanel getGamePanel() {return gamePanel;}
 	public ScorePanel getScorePanel() {return scorePanel;}
@@ -15,14 +18,13 @@ public class GameFrame extends JFrame{
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		gamePanel = new GamePanel(this);
-		gamePanel.setSize(900,900);
-		gamePanel.setLocation(30,(getHeight()-900)/CropImage.heightLength);
-		add(gamePanel);
+		cropImage = new CropImage(this);
+		//gamePanel = new GamePanel(this);
+		//add(gamePanel);
 		
 		scorePanel = new ScorePanel(this);
 		scorePanel.setSize(getWidth()-900-110, 900);
-		scorePanel.setLocation(960,(getHeight()-900)/CropImage.heightLength);
+		scorePanel.setLocation(960,(getHeight()-900)/CropImage.rows);
 		add(scorePanel);
 		
 		setVisible(true);
