@@ -29,13 +29,14 @@ public class GamePanel extends JPanel{
 	GamePanel(GameFrame gameFrame, CropImage cropImage) {
 		this.gameFrame = gameFrame;
 		this.cropImage = cropImage;
-		
+	
+		gridLayout = new GridLayout(CropImage.rows,CropImage.cols);
 		gamePanel.setSize(900,900);
 		gamePanel.setLocation(30,gameFrame.getScorePanel().getY());
 		setBackground(Color.DARK_GRAY);
 		
 		// 원하는 규격
-		setLayout(null);
+		setLayout(gridLayout);
 		
 		for(int i=0;i<devideGamePanel.length;i++) {
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
@@ -50,6 +51,7 @@ public class GamePanel extends JPanel{
 			devideGamePanel[rand1].setMyImageIndex(devideGamePanel[rand2].getMyImageIndex());
 			devideGamePanel[rand2].setMyImageIndex(tempIndex);
 		}
+		revalidate();
 		repaint();
 		
 		addMouseListener(new ChangeDevideGamePanel());
@@ -78,6 +80,7 @@ public class GamePanel extends JPanel{
 			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());
 			devideGamePanel[endIndex].setMyImageIndex(tempIndex);
 			
+			gamePanel.revalidate();
 			gamePanel.repaint();
 			
 			gameFrame.getScorePanel().reprintPerfectionLabel();

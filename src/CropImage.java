@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CropImage {
 		// 3x3은 기본 규격
-		public static int cols = 3;
+		public static int cols = 2;
 		public static int rows = 3;
 		public static int cropWidth;
 		public static int cropHeight;
@@ -20,14 +20,18 @@ public class CropImage {
 		private GamePanel gamePanel = null;
 		private JFileChooser fileChooser = new JFileChooser();
 		private GetWidthHeightDialog getWidthHeightDialog = null;
-		private BufferedImage crop[] = null;
+		public BufferedImage crop[] = null;
 		
 		private String imageLink = "DevideImageGame.png";
 		private BufferedImage image = null;
 		
 		private boolean repaintFlag = false;
 		
+		public void setCrop(BufferedImage crop[]) {
+			this.crop = crop;
+		}
 		public BufferedImage[] getCrop() {return crop;}
+		public BufferedImage getImage() {return image;} 
 		
 		public static void setOption(int row, int col) {
 			rows = row;
@@ -58,27 +62,7 @@ public class CropImage {
 		}
 		
 		public void getNewGrid() {
-			getWidthHeightDialog = new GetWidthHeightDialog(this);
-			repaintFlag = true;
-			while(true) {
-				checkWait();
-				if(repaintFlag==false)
-					break;
-			}
-			
-			cropWidth = (int)(image.getWidth()/cols);
-			cropHeight = (int)(image.getHeight()/rows);
-			for(int i=0;i<crop.length;i++) {
-				crop[i] = image.getSubimage((i%cols)*cropWidth,(i/cols)*cropHeight, cropWidth, cropHeight);
-			}
-			
-			gameFrame.remove(gamePanel);
-			gameFrame.repaint();
-			gamePanel = new GamePanel(gameFrame, this);
-			gameFrame.add(gamePanel);
-			gameFrame.setGamePanel(gamePanel);
-			gameFrame.revalidate();
-			gameFrame.repaint();
+			getWidthHeightDialog = new GetWidthHeightDialog(this, gameFrame);
 		}
 		
 		public void getNewImage() {
@@ -106,10 +90,10 @@ public class CropImage {
 			}
 			
 			gameFrame.remove(gamePanel);
-			gameFrame.repaint();
 			gamePanel = new GamePanel(gameFrame, this);
 			gameFrame.add(gamePanel);
 			gameFrame.setGamePanel(gamePanel);
+			gameFrame.revalidate();
 			gameFrame.repaint();
 		}
 		

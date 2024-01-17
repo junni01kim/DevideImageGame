@@ -1,6 +1,7 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -8,12 +9,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class GetWidthHeightDialog extends JDialog{
+	private GameFrame gameFrame = null;
 	private CropImage cropImage = null; 
 	private JTextField widthTextField = null;
 	private JTextField heightTextField = null;
 	private JButton setOptionButton = null;
 	
-	public GetWidthHeightDialog(CropImage cropImage) {
+	public GetWidthHeightDialog(CropImage cropImage, GameFrame gameFrame) {
+		this.gameFrame = gameFrame;
 		this.cropImage = cropImage;
 		setTitle("행열 지정하기");
 		setSize(250,150);
@@ -36,9 +39,31 @@ public class GetWidthHeightDialog extends JDialog{
 	
 	private class setOptionButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			GamePanel gamePanel = gameFrame.getGamePanel();
 			CropImage.setOption(Integer.parseInt(widthTextField.getText().trim()), Integer.parseInt(heightTextField.getText().trim()));
-			cropImage.toggleRepaintFlag();
+			// cropImage.toggleRepaintFlag();
 			setVisible(false);
+			
+			//cropImage.getCrop() = new BufferedImage[CropImage.cols*CropImage.rows];
+			//crops = new BufferedImage[CropImage.cols*CropImage.rows];;
+
+			cropImage.setCrop(new BufferedImage[CropImage.cols*CropImage.rows]);
+			//cropImage.crop = new BufferedImage[CropImage.cols*CropImage.rows];
+			
+			
+			CropImage.cropWidth = (int)(cropImage.getImage().getWidth()/CropImage.cols);
+			CropImage.cropHeight = (int)(cropImage.getImage().getHeight()/CropImage.rows);
+			for(int i=0;i<CropImage.cols*CropImage.rows;i++) {
+				cropImage.getCrop()[i] = cropImage.getImage().getSubimage((i%CropImage.cols)*CropImage.cropWidth,(i/CropImage.cols)*CropImage.cropHeight, CropImage.cropWidth, CropImage.cropHeight);
+			}
+			
+			gameFrame.remove(gamePanel);
+			gameFrame.repaint();
+			gamePanel = new GamePanel(gameFrame, cropImage);
+			gameFrame.add(gamePanel);
+			gameFrame.setGamePanel(gamePanel);
+			gameFrame.revalidate();
+			gameFrame.repaint();
 		}	
 	}
 }
