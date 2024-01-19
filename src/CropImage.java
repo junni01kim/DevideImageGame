@@ -77,8 +77,8 @@ public class CropImage {
 			System.out.println(rows);
 			
 			int underBarIndex = imageLink.indexOf("_")+1;
-			String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows);
-			//String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows*2);
+			//String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows);
+			String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows*2);
 			
 			crop = new BufferedImage[CropImage.cols*CropImage.rows];
 			CropImage.cropWidth = (int)(image.getWidth()/CropImage.cols);
@@ -149,7 +149,7 @@ public class CropImage {
 				for(int i=0;i<gamePanel.getDevideGamePanel().length;i++) {
 					saveImageGraphics.drawImage(crop[gamePanel.getDevideGamePanel()[i].getMyImageIndex()],(i%cols)*cropWidth,(i/cols)*cropHeight, null);
 					correct += gamePanel.getDevideGamePanel()[i].getMyImageIndex();
-					//correct += "+";
+					correct += "+";
 				}
 				
 				ImageIO.write(saveImage, "png", new File(duplicateNameInSaveImage+cols+"x"+rows+"_"+correct+"_"+Integer.toString(++numberOfSaveImage)+".png"));

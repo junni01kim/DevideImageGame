@@ -42,13 +42,28 @@ public class GamePanel extends JPanel{
 		setLayout(gridLayout);
 		System.out.println(answer);
 		
+//		for(int i=0;i<devideGamePanel.length;i++) {
+//			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
+//			
+//			startAnswerIndex = Character.getNumericValue(answer.charAt(i));
+//			devideGamePanel[i].setMyImageIndex(Character.getNumericValue(answer.charAt(i)));
+//			add(devideGamePanel[i]);
+//		}
+		
+		int needAnswer=0;
+		startAnswerIndex=0;
 		for(int i=0;i<devideGamePanel.length;i++) {
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
+			// 여기서 +부터 +까지 값이 i와 같은 지 찾기
 			
-			startAnswerIndex = Character.getNumericValue(answer.charAt(i));
-			devideGamePanel[i].setMyImageIndex(Character.getNumericValue(answer.charAt(i)));
+			needAnswer = Integer.parseInt(answer.substring(startAnswerIndex, answer.indexOf("+", startAnswerIndex)));
+			startAnswerIndex = answer.indexOf("+", startAnswerIndex)+1;
+			devideGamePanel[i].setMyImageIndex(needAnswer);
+			
+			System.out.print(needAnswer+"+");
 			add(devideGamePanel[i]);
 		}
+		System.out.println();
 		
 		revalidate();
 		repaint();
