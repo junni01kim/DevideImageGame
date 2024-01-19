@@ -29,7 +29,6 @@ public class DevideGamePanel extends JPanel{
 		this.images = images;
 		this.index = index;
 		myImageIndex = answerIndex;
-		System.out.println(myImageIndex);
 		setVisible(true);
 	}
 	

@@ -42,11 +42,12 @@ public class GamePanel extends JPanel{
 		
 		for(int i=0;i<devideGamePanel.length;i++) {
 			answerIndex = Integer.parseInt(answer.substring(i*2, i*2+2)); //¸ÂÀ½
-			System.out.print(answerIndex);	
+			System.out.print(answerIndex);
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop(), answerIndex);
-			devideGamePanel[i].setMyImageIndex(answerIndex);
+			
 			add(devideGamePanel[i]);
 		}
+		
 		System.out.println();
 		
 		revalidate();

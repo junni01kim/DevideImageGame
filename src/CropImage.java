@@ -80,8 +80,15 @@ public class CropImage {
 			CropImage.cropWidth = (int)(image.getWidth()/CropImage.cols);
 			CropImage.cropHeight = (int)(image.getHeight()/CropImage.rows);
 			
+			int answerIndex = 0;
+			
 			for(int i=0;i<CropImage.cols*CropImage.rows;i++) {
-				crop[i] = image.getSubimage((i%CropImage.cols)*CropImage.cropWidth,(i/CropImage.cols)*CropImage.cropHeight, CropImage.cropWidth, CropImage.cropHeight);
+				answerIndex = 0;
+				for(int j=0;j<CropImage.cols*CropImage.rows;j++) {
+					answerIndex = Integer.parseInt(answer.substring(j*2, j*2+2)); //¸ÂÀ½
+					if(answerIndex == i)
+						crop[answerIndex] = image.getSubimage((j%CropImage.cols)*CropImage.cropWidth,(j/CropImage.cols)*CropImage.cropHeight, CropImage.cropWidth, CropImage.cropHeight);
+				}
 			}
 			
 			gameFrame.remove(gamePanel);
