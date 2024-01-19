@@ -29,8 +29,6 @@ public class DevideGamePanel extends JPanel{
 		this.images = images;
 		this.index = index;
 		myImageIndex = index;
-		//setSize(900/CropImage.rows, 900/CropImage.cols);
-		//setLocation((index%CropImage.cols)*getWidth(),(index/CropImage.cols)*getHeight());
 		setVisible(true);
 	}
 }

@@ -37,6 +37,11 @@ public class GameFrame extends JFrame{
 			fileMenu.add(menuItem[i]);
 		}
 		menuBar.add(fileMenu);
+		
+		JMenuItem saveItem = new JMenuItem("Save");
+		saveItem.addActionListener(menuActionListener);
+		menuBar.add(saveItem);
+		
 		setJMenuBar(menuBar);
 		
 		scorePanel = new ScorePanel(this);
@@ -62,6 +67,9 @@ public class GameFrame extends JFrame{
 				break;
 			case "Exit":
 				System.exit(0);
+				break;
+			case "Save":
+				cropImage.saveImage();
 				break;
 			}
 		}

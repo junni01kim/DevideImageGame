@@ -1,3 +1,4 @@
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +12,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class CropImage {
 		// 3x3은 기본 규격
-		public static int cols = 2;
+		public static int cols = 3;
 		public static int rows = 3;
 		public static int cropWidth;
 		public static int cropHeight;
+		private static int numberOfSaveImage=0;
 		
 		private GameFrame gameFrame = null;
 		private GamePanel gamePanel = null;
@@ -25,6 +27,8 @@ public class CropImage {
 		private String imageLink = "DevideImageGame.png";
 		private BufferedImage image = null;
 		
+		private String duplicateNameInSaveImage = "SaveImage";
+		
 		private boolean repaintFlag = false;
 		
 		public void setCrop(BufferedImage crop[]) {
@@ -33,6 +37,7 @@ public class CropImage {
 		public BufferedImage[] getCrop() {return crop;}
 		public BufferedImage getImage() {return image;} 
 		
+		public void setGamePanel(GamePanel gamePanel) {this.gamePanel = gamePanel;} 
 		public static void setOption(int row, int col) {
 			rows = row;
 			cols = col;
@@ -61,8 +66,35 @@ public class CropImage {
 				notify();
 		}
 		
-		public void getNewGrid() {
-			getWidthHeightDialog = new GetWidthHeightDialog(this, gameFrame);
+		private void getSavingImage(String imageLink) {
+			int colsStartIndex = imageLink.indexOf(duplicateNameInSaveImage)+duplicateNameInSaveImage.length();
+			cols = Integer.parseInt(imageLink.substring(colsStartIndex,imageLink.indexOf('x', colsStartIndex)));
+			
+			int rowsStartIndex = imageLink.indexOf('x', colsStartIndex)+1;
+			rows = Integer.parseInt(imageLink.substring(rowsStartIndex,imageLink.indexOf('_', rowsStartIndex)));
+			
+			System.out.println(cols);
+			System.out.println(rows);
+			
+			int underBarIndex = imageLink.indexOf("_")+1;
+			String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows);
+			//String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows*2);
+			
+			crop = new BufferedImage[CropImage.cols*CropImage.rows];
+			CropImage.cropWidth = (int)(image.getWidth()/CropImage.cols);
+			CropImage.cropHeight = (int)(image.getHeight()/CropImage.rows);
+			
+			for(int i=0;i<CropImage.cols*CropImage.rows;i++) {
+				crop[i] = image.getSubimage((i%CropImage.cols)*CropImage.cropWidth,(i/CropImage.cols)*CropImage.cropHeight, CropImage.cropWidth, CropImage.cropHeight);
+			}
+			
+			gameFrame.remove(gamePanel);
+			gameFrame.repaint();
+			gamePanel = new GamePanel(gameFrame, this, answer);
+			gameFrame.add(gamePanel);
+			gameFrame.setGamePanel(gamePanel);
+			gameFrame.revalidate();
+			gameFrame.repaint();
 		}
 		
 		public void getNewImage() {
@@ -76,6 +108,12 @@ public class CropImage {
 			}
 			
 			String imageLink = fileChooser.getSelectedFile().toString();
+			
+			if(imageLink.contains(duplicateNameInSaveImage)) {
+				getSavingImage(imageLink);
+				return;
+			}
+			
 			try {
 				image = ImageIO.read(new File(imageLink));
 			} catch (IOException e) {
@@ -95,6 +133,31 @@ public class CropImage {
 			gameFrame.setGamePanel(gamePanel);
 			gameFrame.revalidate();
 			gameFrame.repaint();
+		}
+		
+		public void getNewGrid() {
+			getWidthHeightDialog = new GetWidthHeightDialog(this, gameFrame);
+		}
+		
+		public void saveImage() {
+			try {
+				BufferedImage saveImage = new BufferedImage(cropWidth*cols, cropHeight*rows, BufferedImage.TYPE_INT_RGB);
+				Graphics2D saveImageGraphics = (Graphics2D)saveImage.getGraphics();
+				
+				String correct = "";
+				
+				for(int i=0;i<gamePanel.getDevideGamePanel().length;i++) {
+					saveImageGraphics.drawImage(crop[gamePanel.getDevideGamePanel()[i].getMyImageIndex()],(i%cols)*cropWidth,(i/cols)*cropHeight, null);
+					correct += gamePanel.getDevideGamePanel()[i].getMyImageIndex();
+					//correct += "+";
+				}
+				
+				ImageIO.write(saveImage, "png", new File(duplicateNameInSaveImage+cols+"x"+rows+"_"+correct+"_"+Integer.toString(++numberOfSaveImage)+".png"));
+				JOptionPane.showMessageDialog(null, "저장되었습니다", "저장", JOptionPane.INFORMATION_MESSAGE);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		CropImage(GameFrame gameFrame) {

@@ -41,14 +41,10 @@ public class GetWidthHeightDialog extends JDialog{
 		public void actionPerformed(ActionEvent e) {
 			GamePanel gamePanel = gameFrame.getGamePanel();
 			CropImage.setOption(Integer.parseInt(widthTextField.getText().trim()), Integer.parseInt(heightTextField.getText().trim()));
-			// cropImage.toggleRepaintFlag();
+
 			setVisible(false);
-			
-			//cropImage.getCrop() = new BufferedImage[CropImage.cols*CropImage.rows];
-			//crops = new BufferedImage[CropImage.cols*CropImage.rows];;
 
 			cropImage.setCrop(new BufferedImage[CropImage.cols*CropImage.rows]);
-			//cropImage.crop = new BufferedImage[CropImage.cols*CropImage.rows];
 			
 			
 			CropImage.cropWidth = (int)(cropImage.getImage().getWidth()/CropImage.cols);
@@ -60,8 +56,9 @@ public class GetWidthHeightDialog extends JDialog{
 			gameFrame.remove(gamePanel);
 			gameFrame.repaint();
 			gamePanel = new GamePanel(gameFrame, cropImage);
-			gameFrame.add(gamePanel);
+			cropImage.setGamePanel(gamePanel);
 			gameFrame.setGamePanel(gamePanel);
+			gameFrame.add(gamePanel);
 			gameFrame.revalidate();
 			gameFrame.repaint();
 		}	
