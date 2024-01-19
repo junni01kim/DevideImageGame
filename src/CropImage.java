@@ -73,11 +73,7 @@ public class CropImage {
 			int rowsStartIndex = imageLink.indexOf('x', colsStartIndex)+1;
 			rows = Integer.parseInt(imageLink.substring(rowsStartIndex,imageLink.indexOf('_', rowsStartIndex)));
 			
-			System.out.println(cols);
-			System.out.println(rows);
-			
 			int underBarIndex = imageLink.indexOf("_")+1;
-			//String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows);
 			String answer = imageLink.substring(underBarIndex,underBarIndex+cols*rows*2);
 			
 			crop = new BufferedImage[CropImage.cols*CropImage.rows];
@@ -109,16 +105,16 @@ public class CropImage {
 			
 			String imageLink = fileChooser.getSelectedFile().toString();
 			
-			if(imageLink.contains(duplicateNameInSaveImage)) {
-				getSavingImage(imageLink);
-				return;
-			}
-			
 			try {
 				image = ImageIO.read(new File(imageLink));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			if(imageLink.contains(duplicateNameInSaveImage)) {
+				getSavingImage(imageLink);
+				return;
 			}
 			
 			cropWidth = (int)(image.getWidth()/cols);
@@ -148,8 +144,7 @@ public class CropImage {
 				
 				for(int i=0;i<gamePanel.getDevideGamePanel().length;i++) {
 					saveImageGraphics.drawImage(crop[gamePanel.getDevideGamePanel()[i].getMyImageIndex()],(i%cols)*cropWidth,(i/cols)*cropHeight, null);
-					correct += gamePanel.getDevideGamePanel()[i].getMyImageIndex();
-					correct += "+";
+					correct += String.format("%02d",gamePanel.getDevideGamePanel()[i].getMyImageIndex());
 				}
 				
 				ImageIO.write(saveImage, "png", new File(duplicateNameInSaveImage+cols+"x"+rows+"_"+correct+"_"+Integer.toString(++numberOfSaveImage)+".png"));

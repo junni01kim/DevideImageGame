@@ -11,7 +11,7 @@ public class ScorePanel extends JPanel{
 	public void reprintPerfectionLabel() {
 		int count = 0;
 		for(int i=0; i<gameFrame.getGamePanel().getDevideGamePanel().length; i++) {
-			if(gameFrame.getGamePanel().getDevideGamePanel()[i].getMyImageIndex() == gameFrame.getGamePanel().getDevideGamePanel()[i].getIndex()) {
+			if(gameFrame.getGamePanel().getDevideGamePanel()[i].getMyImageIndex() == i) {
 				count++;
 			}
 		}

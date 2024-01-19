@@ -36,31 +36,15 @@ public class GamePanel extends JPanel{
 		gamePanel.setLocation(30,gameFrame.getScorePanel().getY());
 		setBackground(Color.DARK_GRAY);
 	
-		int startAnswerIndex = 0;
+		int answerIndex = 0;
 		
-		// 원하는 규격
 		setLayout(gridLayout);
-		System.out.println(answer);
 		
-//		for(int i=0;i<devideGamePanel.length;i++) {
-//			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
-//			
-//			startAnswerIndex = Character.getNumericValue(answer.charAt(i));
-//			devideGamePanel[i].setMyImageIndex(Character.getNumericValue(answer.charAt(i)));
-//			add(devideGamePanel[i]);
-//		}
-		
-		int needAnswer=0;
-		startAnswerIndex=0;
 		for(int i=0;i<devideGamePanel.length;i++) {
-			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop());
-			// 여기서 +부터 +까지 값이 i와 같은 지 찾기
-			
-			needAnswer = Integer.parseInt(answer.substring(startAnswerIndex, answer.indexOf("+", startAnswerIndex)));
-			startAnswerIndex = answer.indexOf("+", startAnswerIndex)+1;
-			devideGamePanel[i].setMyImageIndex(needAnswer);
-			
-			System.out.print(needAnswer+"+");
+			answerIndex = Integer.parseInt(answer.substring(i*2, i*2+2)); //맞음
+			System.out.print(answerIndex);	
+			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop(), answerIndex);
+			devideGamePanel[i].setMyImageIndex(answerIndex);
 			add(devideGamePanel[i]);
 		}
 		System.out.println();
@@ -122,6 +106,11 @@ public class GamePanel extends JPanel{
 			// 시작점과 끝 포인트의 마우스가 어느 컴포넌트 (배열 인덱스를 가르키는지 알게하는 함수)
 			int startIndex = (int) ((int)(startPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(startPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
 			int endIndex = (int) ((int)(endPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(endPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
+			
+			System.out.println();
+			System.out.println(devideGamePanel[startIndex].getMyImageIndex());
+			System.out.println(devideGamePanel[endIndex].getMyImageIndex());
+			System.out.println();
 			
 			int tempIndex = devideGamePanel[startIndex].getMyImageIndex();
 			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());

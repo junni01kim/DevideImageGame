@@ -25,6 +25,14 @@ public class DevideGamePanel extends JPanel{
 		g.drawImage(images[myImageIndex], 0, 0, this.getWidth(), this.getHeight(), this);
 	}
 	
+	DevideGamePanel(int index, BufferedImage[] images, int answerIndex) {
+		this.images = images;
+		this.index = index;
+		myImageIndex = answerIndex;
+		System.out.println(myImageIndex);
+		setVisible(true);
+	}
+	
 	DevideGamePanel(int index, BufferedImage[] images) {
 		this.images = images;
 		this.index = index;
