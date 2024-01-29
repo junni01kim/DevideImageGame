@@ -42,13 +42,10 @@ public class GamePanel extends JPanel{
 		
 		for(int i=0;i<devideGamePanel.length;i++) {
 			answerIndex = Integer.parseInt(answer.substring(i*2, i*2+2)); //맞음
-			System.out.print(answerIndex);
 			devideGamePanel[i] = new DevideGamePanel(i, cropImage.getCrop(), answerIndex);
 			
 			add(devideGamePanel[i]);
 		}
-		
-		System.out.println();
 		
 		revalidate();
 		repaint();
@@ -107,11 +104,6 @@ public class GamePanel extends JPanel{
 			// 시작점과 끝 포인트의 마우스가 어느 컴포넌트 (배열 인덱스를 가르키는지 알게하는 함수)
 			int startIndex = (int) ((int)(startPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(startPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
 			int endIndex = (int) ((int)(endPoint.getY()/(gamePanel.getHeight()/CropImage.rows))*CropImage.cols+(int)(endPoint.getX()/(gamePanel.getHeight()/CropImage.cols)));
-			
-			System.out.println();
-			System.out.println(devideGamePanel[startIndex].getMyImageIndex());
-			System.out.println(devideGamePanel[endIndex].getMyImageIndex());
-			System.out.println();
 			
 			int tempIndex = devideGamePanel[startIndex].getMyImageIndex();
 			devideGamePanel[startIndex].setMyImageIndex(devideGamePanel[endIndex].getMyImageIndex());
