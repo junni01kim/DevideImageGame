@@ -19,7 +19,9 @@
      - 이미지는 (./)에 저장된다.
 
 ## 파일 구조
-  
+  ![제목 없음](https://github.com/junni01kim/DevideImageGame/assets/127941871/60ed2eab-ac08-4cda-b980-f068b9bad760)
+#### CropImage: GameFrame 생성시 생기는 클래스로 이미지를 자르고, 이미지를 토대로 GamePanel(?x?개의 DevideGamePanel)을 생성한다.
+GetWidthHeightDialog: 이미지를 분할하는 JDialog이며, 2개의 JTextField와 JActionListener만 존재한다.  
 
 ## 프로그램 설명
 - ```GamePanel```은 3x3 사이즈의 9개의 ```DevideGamePanel``` 객체를 가지고 있다.
